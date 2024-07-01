@@ -58,34 +58,10 @@ Notre projet utilise une architecture asynchrone conforme aux exigences du hacka
 Un système de file d'attente au niveau du service API gère l'absence de connexion temporaire, assurant une robustesse conforme aux attentes du hackathon.
 
 ## Schéma d'Interaction des Composants et Technologies
+<img width="687" alt="Screenshot 2024-07-01 at 11 27 53" src="https://github.com/Amirofcodes/IT-akademy-PROJECT-IoT-HandPi-Games/assets/138374972/0fba9d09-dae9-4f77-8f67-30b72260c096">
 
-                 +-------------------------+
-                 |      Frontend UI        |
-                 | (HTML/CSS/JavaScript)   |
-                 +-----------+-------------+
-                             |
-                             v
-                 +-----------+-------------+
-                 |     Flask (Backend)     |
-                 |    (Python Framework)   |
-                 +-----------+-------------+
-                             |
-                             v
-          +------------------+------------------+
-          |                                    |
-          v                                    v
-+---------+----------+             +-----------+---------+
-|  OpenCV (Python)   |             |  Game Logic (Python)|
-| Capture and Process|             | Determine Correct   |
-| Hand Gestures      |             | Sign                |
-+--------------------+             +-----------+---------+
-                                             |
-                                             v
-                                  +----------+----------+
-                                  | Raspberry Pi 4 (Server)|
-                                  +-----------------------+
-                                  | Camera Module (Input)  |
-                                  +-----------------------+
+
+              
 
 
 
