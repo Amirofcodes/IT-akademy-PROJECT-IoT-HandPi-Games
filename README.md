@@ -1,6 +1,7 @@
 # HandPi Games
 
 ## Description
+
 HandPi Games est une collection innovante de jeux utilisant la reconnaissance des gestes de la main par IA, développée spécifiquement pour le hackathon "Open Project IoT". Ce projet répond parfaitement aux critères du hackathon en combinant l'IoT, l'IA et l'apprentissage interactif.
 
 ## Conformité aux Objectifs du Hackathon
@@ -37,11 +38,13 @@ HandPi Games est une collection innovante de jeux utilisant la reconnaissance de
 - HTML/CSS/JavaScript
 
 ## Structure du Projet
+
 - `backend/`: Code backend et API.
 - `frontend/`: Interface utilisateur web.
 - `model/`: Scripts et modèles de reconnaissance des gestes.
 
 ## Architecture
+
 Notre projet utilise une architecture asynchrone conforme aux exigences du hackathon :
 - Client web (Frontend UI)
 - Service API (Backend Flask)
@@ -78,3 +81,6 @@ Un système de file d'attente au niveau du service API gère l'absence de connex
                                   +-------------------------+
                                   | Module Caméra (Entrée)  |
                                   +-------------------------+
+
+
+                                  
