@@ -1,31 +1,34 @@
-# IT-akademy-PROJECT-IoT-HandPi-Games
-
-# handPi Games
+# HandPi Games
 
 ## Description
-handPi Games est un jeu de Pierre-Papier-Ciseaux à distance avec reconnaissance des gestes de la main par IA. Ce projet utilise un Raspberry Pi 4 et une caméra pour capturer et reconnaître les gestes des joueurs, et un serveur Flask pour gérer la logique du jeu et l'interface utilisateur.
+
+HandPi Games est une collection de jeux utilisant la reconnaissance des gestes de la main par IA. Notre premier jeu se concentre sur l'apprentissage de la langue des signes, où les joueurs voient des lettres à l'écran et doivent les signer correctement avec leurs mains. Les futures mises à jour incluront des jeux supplémentaires tels qu'un jeu de Pierre-Papier-Ciseaux à distance.
+
+Ce projet a pour but d'utiliser les nouvelles technologies disponibles ainsi que l'IA pour aider les gens à communiquer.
 
 ## Fonctionnalités Principales
-1. **Menu Principal**:
-   - Sélection de modes de jeu simples:
-     - Mode Classique: Jouer contre l'ordinateur.
-     - Mode Contre un Ami: Jouer contre un autre joueur localement.
 
-2. **Reconnaissance des Gestes**:
-   - Utilisation de la caméra pour capturer les gestes de la main (pierre, papier, ciseaux).
-   - Affichage des résultats du geste détecté.
+- **Jeu d'Apprentissage de la Langue des Signes :**
+  - Les joueurs voient une lettre à l'écran.
+  - Les joueurs doivent signer la lettre affichée avec leurs mains devant la caméra.
+  - Si le signe est correct, le jeu passe à la lettre suivante.
+  - Le jeu continue jusqu'à ce que le joueur complète l'alphabet.
 
-3. **Logiciel de Jeu**:
-   - Implémentation de la logique de base pour déterminer le gagnant (pierre > ciseaux, papier > pierre, ciseaux > papier).
-   - Gestion des égalités lorsque les deux joueurs jouent la même main.
+- **Mises à Jour Futures :**
+  - **Stage 2:** Signer des mots au lieu de lettres individuelles.
+  - **Pierre-Papier-Ciseaux:** Jouer contre l'ordinateur ou un autre joueur à distance.
 
 ## Technologies Utilisées
-- Raspberry Pi 4
-- Python
-- OpenCV
-- TensorFlow/Keras
-- Flask
-- HTML/CSS/JavaScript
+
+- **Matériel:**
+  - Raspberry Pi 4
+  - Module Caméra
+- **Logiciel:**
+  - Python
+  - OpenCV
+  - TensorFlow/Keras
+  - Flask
+  - HTML/CSS/JavaScript
 
 ## Structure du Projet
 - `backend/`: Contient le code backend et les API.
