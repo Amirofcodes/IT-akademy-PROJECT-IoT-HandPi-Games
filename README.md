@@ -7,10 +7,15 @@ HandPi Games est une collection innovante de jeux utilisant la reconnaissance de
 ## Conformité aux Objectifs du Hackathon
 
 ✅ **Objet Connecté Fonctionnel** : Utilisation du Raspberry Pi 4 avec module caméra.
+
 ✅ **Application Web de Contrôle** : Interface utilisateur web pour interagir avec le jeu.
+
 ✅ **Développement Full-Stack** : Intégration de front-end et back-end.
+
 ✅ **Architecture Asynchrone** : Système permettant un pilotage flexible de l'objet connecté.
+
 ✅ **Innovation et Créativité** : Utilisation de l'IA pour la reconnaissance des gestes.
+
 ✅ **Impact Social** : Facilite l'apprentissage de la langue des signes.
 
 ## Fonctionnalités Principales
