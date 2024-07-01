@@ -1,52 +1,65 @@
 # HandPi Games
 
 ## Description
+HandPi Games est une collection innovante de jeux utilisant la reconnaissance des gestes de la main par IA, développée spécifiquement pour le hackathon "Open Project IoT". Ce projet répond parfaitement aux critères du hackathon en combinant l'IoT, l'IA et l'apprentissage interactif.
 
-HandPi Games est une collection de jeux utilisant la reconnaissance des gestes de la main par IA. Notre premier jeu se concentre sur l'apprentissage de la langue des signes, où les joueurs voient des lettres à l'écran et doivent les signer correctement avec leurs mains. Les futures mises à jour incluront des jeux supplémentaires tels qu'un jeu de Pierre-Papier-Ciseaux à distance.
+## Conformité aux Objectifs du Hackathon
 
-Ce projet a pour but d'utiliser les nouvelles technologies disponibles ainsi que l'IA pour aider les gens à communiquer.
+✅ **Objet Connecté Fonctionnel** : Utilisation du Raspberry Pi 4 avec module caméra.
+✅ **Application Web de Contrôle** : Interface utilisateur web pour interagir avec le jeu.
+✅ **Développement Full-Stack** : Intégration de front-end et back-end.
+✅ **Architecture Asynchrone** : Système permettant un pilotage flexible de l'objet connecté.
+✅ **Innovation et Créativité** : Utilisation de l'IA pour la reconnaissance des gestes.
+✅ **Impact Social** : Facilite l'apprentissage de la langue des signes.
 
 ## Fonctionnalités Principales
 
-- **Jeu d'Apprentissage de la Langue des Signes :**
-  - Les joueurs voient une lettre à l'écran.
-  - Les joueurs doivent signer la lettre affichée avec leurs mains devant la caméra.
-  - Si le signe est correct, le jeu passe à la lettre suivante.
-  - Le jeu continue jusqu'à ce que le joueur complète l'alphabet.
+### Jeu d'Apprentissage de la Langue des Signes :
+- Affichage de lettres à l'écran.
+- Reconnaissance des signes effectués par le joueur via la caméra.
+- Progression à travers l'alphabet.
 
-- **Mises à Jour Futures :**
-  - **Stage 2:** Signer des mots au lieu de lettres individuelles.
-  - **Pierre-Papier-Ciseaux:** Jouer contre l'ordinateur ou un autre joueur à distance.
+### Mises à Jour Futures :
+- **Stage 2:** Reconnaissance de mots complets en langue des signes.
+- **Pierre-Papier-Ciseaux:** Jeu multijoueur à distance.
 
 ## Technologies Utilisées
 
-- **Matériel:**
-  - Raspberry Pi 4
-  - Module Caméra
-- **Logiciel:**
-  - Python
-  - OpenCV
-  - TensorFlow/Keras
-  - Flask
-  - HTML/CSS/JavaScript
+### Matériel:
+- Raspberry Pi 4
+- Module Caméra
+
+### Logiciel:
+- Python
+- OpenCV
+- TensorFlow/Keras
+- Flask
+- HTML/CSS/JavaScript
 
 ## Structure du Projet
-- `backend/`: Contient le code backend et les API.
-- `frontend/`: Contient le code frontend et l'interface utilisateur.
-- `model/`: Contient les scripts et modèles de reconnaissance des gestes.
+- `backend/`: Code backend et API.
+- `frontend/`: Interface utilisateur web.
+- `model/`: Scripts et modèles de reconnaissance des gestes.
+
+## Architecture
+Notre projet utilise une architecture asynchrone conforme aux exigences du hackathon :
+- Client web (Frontend UI)
+- Service API (Backend Flask)
+- Client IoT (Raspberry Pi avec caméra)
+
+Un système de file d'attente au niveau du service API gère l'absence de connexion temporaire, assurant une robustesse conforme aux attentes du hackathon.
 
 ## Schéma d'Interaction des Composants et Technologies
 
-```plaintext
                  +-------------------------+
-                 |      Frontend UI        |
+                 |      Interface UI       |
                  | (HTML/CSS/JavaScript)   |
                  +-----------+-------------+
                              |
                              v
                  +-----------+-------------+
                  |     Flask (Backend)     |
-                 |    (Python Framework)   |
+                 |    (Framework Python)   |
                  +-----------+-------------+
                              |
                              v
@@ -54,14 +67,14 @@ Ce projet a pour but d'utiliser les nouvelles technologies disponibles ainsi que
           |                                    |
           v                                    v
 +---------+----------+             +-----------+---------+
-|  OpenCV (Python)   |             |  Game Logic (Python)|
-| Capture and Process|             | Determine Winner    |
-| Hand Gestures      |             |                    |
+|  OpenCV (Python)   |             | Logique du Jeu      |
+| Capturer et Traiter|             | (Python)            |
+| les Gestes de la Main|           | Determine Winner    |
 +--------------------+             +-----------+---------+
                                              |
                                              v
-                                  +----------+----------+
-                                  | Raspberry Pi 4 (Server)|
-                                  +-----------------------+
-                                  | Camera Module (Input)  |
-                                  +-----------------------+
+                                  +----------+--------------+
+                                  | Raspberry Pi 4 (Serveur)|
+                                  +-------------------------+
+                                  | Module Caméra (Entrée)  |
+                                  +-------------------------+
