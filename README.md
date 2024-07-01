@@ -60,14 +60,14 @@ Un système de file d'attente au niveau du service API gère l'absence de connex
 ## Schéma d'Interaction des Composants et Technologies
 
                  +-------------------------+
-                 |      Interface UI       |
+                 |      Frontend UI        |
                  | (HTML/CSS/JavaScript)   |
                  +-----------+-------------+
                              |
                              v
                  +-----------+-------------+
                  |     Flask (Backend)     |
-                 |    (Framework Python)   |
+                 |    (Python Framework)   |
                  +-----------+-------------+
                              |
                              v
@@ -75,17 +75,18 @@ Un système de file d'attente au niveau du service API gère l'absence de connex
           |                                    |
           v                                    v
 +---------+----------+             +-----------+---------+
-|  OpenCV (Python)   |             | Logique du Jeu      |
-| Capturer et Traiter|             | (Python)            |
-| les Gestes de la Main|           | Determine Winner    |
+|  OpenCV (Python)   |             |  Game Logic (Python)|
+| Capture and Process|             | Determine Correct   |
+| Hand Gestures      |             | Sign                |
 +--------------------+             +-----------+---------+
                                              |
                                              v
-                                  +----------+--------------+
-                                  | Raspberry Pi 4 (Serveur)|
-                                  +-------------------------+
-                                  | Module Caméra (Entrée)  |
-                                  +-------------------------+
+                                  +----------+----------+
+                                  | Raspberry Pi 4 (Server)|
+                                  +-----------------------+
+                                  | Camera Module (Input)  |
+                                  +-----------------------+
+
 
 
                                   
