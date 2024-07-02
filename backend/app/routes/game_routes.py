@@ -20,3 +20,4 @@ def check_gesture():
         return jsonify({'message': 'No gesture provided'}), 400
     result = game_service.check_gesture(gesture)
     return jsonify(result)
+
