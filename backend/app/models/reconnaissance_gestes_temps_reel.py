@@ -57,15 +57,30 @@ class ReconnaissanceGestesTempsReel:
                     data_aux.append(y_[i] - min(y_))
 
                 if len(data_aux) == 42:
-            prediction = self.model.predict([np.asarray(data_aux)])
-            predicted_character = self.labels_dict.get(str(prediction[0]), 'Inconnu')
+                    prediction = self.model.predict([np.asarray(data_aux)])
+                    predicted_character = self.labels_dict.get(str(prediction[0]), 'Inconnu')
 
-            x1, y1 = int(min(x_) * W) - 10, int(min(y_) * H) - 10
-            x2, y2 = int(max(x_) * W) - 10, int(max(y_) * H) - 10
+                    x1, y1 = int(min(x_) * W) - 10, int(min(y_) * H) - 10
+                    x2, y2 = int(max(x_) * W) - 10, int(max(y_) * H) - 10
 
-            cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
-            cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
-        else:
-            print(f"Nombre de caractéristiques inattendu : {len(data_aux)}")
+                    cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
+                    cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
+                else:
+                    print(f"Nombre de caractéristiques inattendu : {len(data_aux)}")
 
         return frame
+
+    def gen_frames(self):
+        cap = cv2.VideoCapture(0)
+        while True:
+            success, frame = cap.read()
+            if not success:
+                break
+            else:
+                frame = self.traiter_frame(frame)
+                ret, buffer = cv2.imencode('.jpg', frame)
+                frame = buffer.tobytes()
+                yield (b'--frame\r\n'
+                       b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        cap.release()
+
