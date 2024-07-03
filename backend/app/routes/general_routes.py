@@ -1,7 +1,13 @@
 from flask import Blueprint, jsonify, Response
 import cv2
+from ..models.user import get_reconnaissance_gestes
 
 bp = Blueprint('general', __name__)
+
+@bp.route('/video_training', methods=['GET'])
+def video_training():
+    reconnaissance_gestes = get_reconnaissance_gestes()
+    return Response(reconnaissance_gestes.gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @bp.route('/', methods=['GET'])
 def home():
