@@ -18,4 +18,7 @@ class ReconnaissanceGestesTempsReel:
         self.model = model_dict['model']
 
     def configurer_mediapipe(self):
-        pass
+        self.mp_hands = mp.solutions.hands
+        self.mp_drawing = mp.solutions.drawing_utils
+        self.mp_drawing_styles = mp.solutions.drawing_styles
+        self.hands = self.mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
