@@ -13,7 +13,9 @@ class ReconnaissanceGestesTempsReel:
         self.configurer_mediapipe()
 
     def charger_modele(self, chemin_modele: str):
-        pass
+        with open(chemin_modele, 'rb') as f:
+            model_dict = pickle.load(f)
+        self.model = model_dict['model']
 
     def configurer_mediapipe(self):
         pass
