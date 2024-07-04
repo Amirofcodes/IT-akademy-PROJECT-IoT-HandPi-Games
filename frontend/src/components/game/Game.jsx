@@ -1,4 +1,3 @@
-// src/components/Game.jsx
 import React, { useState, useRef } from "react";
 import axios from "axios";
 import Webcam from "react-webcam";
@@ -23,7 +22,11 @@ const Game = () => {
   const startGame = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('http://127.0.0.1:5000/video_training');
+      const response = await axios.post('http://127.0.0.1:5000/video_training', {}, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
       setMessage(response.data.message);
       setCurrentLetter(response.data.current_letter);
       setGameStarted(true);
@@ -38,7 +41,11 @@ const Game = () => {
     if (webcamRef.current) {
       const imageSrc = webcamRef.current.getScreenshot();
       try {
-        const response = await axios.post('http://127.0.0.1:5000/video_training', { gesture: imageSrc });
+        const response = await axios.post('http://127.0.0.1:5000/video_training', { gesture: imageSrc }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
         setMessage(response.data.message);
         setCurrentLetter(response.data.new_letter);
         setScore(response.data.score);
