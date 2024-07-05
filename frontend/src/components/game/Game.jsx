@@ -2,13 +2,12 @@ import React, { useState, useRef } from "react";
 import axios from "axios";
 import Webcam from "react-webcam";
 
-const instructions = 
-  `Instructions:
-  1. Cliquez sur le bouton "Démarrer le jeu" pour lancer le jeu.
-  2. Après le début du jeu, la caméra s'allumera.
-  3. Montrez les gestes correspondant aux lettres de l'alphabet des sourds-muets devant la caméra.
-  4. Le système reconnaîtra les gestes et affichera la lettre actuelle et le score.
-  5. Continuez à montrer les gestes jusqu'à ce que vous ayez terminé l'alphabet.
+const instructions = `Instructions:
+1. Cliquez sur le bouton "Démarrer le jeu" pour lancer le jeu.
+2. Après le début du jeu, la caméra s'allumera.
+3. Montrez les gestes correspondant aux lettres de l'alphabet des sourds-muets devant la caméra.
+4. Le système reconnaîtra les gestes et affichera la lettre actuelle et le score.
+5. Continuez à montrer les gestes jusqu'à ce que vous ayez terminé l'alphabet.
 `;
 
 const Game = () => {
@@ -22,16 +21,15 @@ const Game = () => {
   const startGame = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('http://127.0.0.1:5000/video_training', {}, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      const response = await axios.get('http://127.0.0.1:5000/video_feed', {
+        responseType: 'blob'
       });
-      setMessage(response.data.message);
-      setCurrentLetter(response.data.current_letter);
+      setMessage('Game started');
+      setCurrentLetter('A');  // Start with the first letter
       setGameStarted(true);
     } catch (error) {
       console.error('Error starting the game:', error);
+      setMessage('Error starting the game');
     } finally {
       setLoading(false);
     }
@@ -41,16 +39,17 @@ const Game = () => {
     if (webcamRef.current) {
       const imageSrc = webcamRef.current.getScreenshot();
       try {
-        const response = await axios.post('http://127.0.0.1:5000/video_training', { gesture: imageSrc }, {
+        const response = await axios.post('http://127.0.0.1:5000/check_gesture', { gesture: imageSrc }, {
           headers: {
             'Content-Type': 'application/json'
           }
         });
         setMessage(response.data.message);
-        setCurrentLetter(response.data.new_letter);
-        setScore(response.data.score);
+        setCurrentLetter(response.data.predicted_character);
+        setScore(prevScore => prevScore + 1);  // Increment score on correct gesture
       } catch (error) {
         console.error('Error checking the gesture:', error);
+        setMessage('Error checking the gesture');
       }
     }
   };
@@ -61,7 +60,7 @@ const Game = () => {
       {!gameStarted && (
         <div className="text-start">
           <pre className="mb-6">{instructions}</pre>
-          <button 
+          <button
             onClick={startGame}
             className="bg-button-gradient hover:bg-green-700 text-black font-bold py-3 px-20 rounded-full"
           >
@@ -81,7 +80,7 @@ const Game = () => {
           <p className="text-xl mb-2">{message}</p>
           {currentLetter && <p className="text-2xl mb-2">Montrez la lettre: {currentLetter}</p>}
           <p className="text-xl mb-4">Score: {score}</p>
-          <button 
+          <button
             onClick={checkGesture}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
