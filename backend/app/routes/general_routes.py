@@ -13,18 +13,11 @@ def video_feed():
 
 @bp.route('/check_gesture', methods=['POST'])
 def check_gesture():
-    # Get the image data from the request
     image_data = request.json.get('gesture')
-    
-    # Convert the base64 image to a numpy array
     nparr = np.frombuffer(base64.b64decode(image_data.split(',')[1]), np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    
-    # Process the image with your AI model
     reconnaissance_gestes = get_reconnaissance_gestes()
     result = reconnaissance_gestes.traiter_frame(img)
-    
-    # Return the result
     return jsonify(result)
 
 @bp.route('/', methods=['GET'])

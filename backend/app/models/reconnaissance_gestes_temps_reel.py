@@ -71,12 +71,33 @@ class ReconnaissanceGestesTempsReel:
         return frame
 
     def gen_frames(self):
+        print("Début de gen_frames")
+        # Option 1: Utiliser le périphérique par défaut
         cap = cv2.VideoCapture(0)
+        # Option 2: Spécifier explicitement le périphérique
+        # cap = cv2.VideoCapture('/dev/video0')
+        # Option 3: Utiliser GStreamer backend
+        # cap = cv2.VideoCapture(0, cv2.CAP_GSTREAMER)
+        
+        print(f"Caméra ouverte: {cap.isOpened()}")
+        
+        if not cap.isOpened():
+            print("Erreur: Impossible d'ouvrir la caméra")
+            return
+
+        # Définir explicitement le format
+        cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+
         while True:
+            print("Tentative de lecture d'une frame")
             success, frame = cap.read()
             if not success:
+                print("Échec de la lecture de la frame")
                 break
             else:
+                print("Frame lue avec succès")
                 frame = self.traiter_frame(frame)
                 ret, buffer = cv2.imencode('.jpg', frame)
                 frame = buffer.tobytes()
