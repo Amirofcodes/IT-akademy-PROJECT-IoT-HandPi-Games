@@ -1,79 +1,103 @@
-.db
-svelte-kit
-build-*
-ios
-android
-modules/
-parse-skdocs.cjs
-sk.json
+# Dependencies
+node_modules/
+venv/
+ENV/
+**/site-packages/
 
-# OSX
+# Build outputs
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Cache files
+__pycache__/
+*.py[cod]
+.cache
+.pytest_cache/
+.mypy_cache/
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+*.swo
 .DS_Store
 
-# Xcode
-build/
-*.pbxuser
-!default.pbxuser
-*.mode1v3
-!default.mode1v3
-*.mode2v3
-!default.mode2v3
-*.perspectivev3
-!default.perspectivev3
-xcuserdata
-*.xccheckout
-*.moved-aside
-DerivedData
-*.hmap
-*.ipa
-*.xcuserstate
-project.xcworkspace
-
-# Android/IntelliJ
-build/
-.idea
-.gradle
-local.properties
-*.iml
-*.hprof
-
-# Node.js
-node_modules/
-npm-debug.log
-yarn-error.log
-
-# BUCK
-buck-out/
-\.buckd/
-*.keystore
-!debug.keystore
-
-# Bundle artifacts
-*.jsbundle
-
-# CocoaPods
-/ios/Pods/
-
-# Expo
-.expo/
-web-build/
-dist/
-
-# Metro
-.metro-health-check*
-
-# VS Code
-.vscode/
-
-# Webstorm
-.idea/
-
-# Eclipse
-.project
-.classpath
-.settings
-
-# Misc
+# Logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Version control
+.git/
+.gitignore
+
+# Package manager files
+package-lock.json
+yarn.lock
+Pipfile.lock
+
+# Testing
+coverage/
+
+# Temporary files
 *.tmp
 *.temp
+.DS_Store
+
+# Binary files
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.dylib
+*.dll
+
+# Database files
+*.sqlite3
+*.db
+
+# Large media files
+*.mp4
+*.tiff
+*.avi
+*.flv
+*.mov
+*.wmv
+
+# Specific to your project
+backend/venv/
+backend/__pycache__/
+backend/app/__pycache__/
+backend/app/**/__pycache__/
+**/bin/
+
+# Documentation (include if you want to exclude from digest)
+# docs/
+
+# Configuration files (include if you want to exclude from digest)
+# *.cfg
+# *.conf
+
+# Data files (include if you want to exclude from digest)
+# *.csv
+# *.json
+# *.xml
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# System files
+Thumbs.db
+
