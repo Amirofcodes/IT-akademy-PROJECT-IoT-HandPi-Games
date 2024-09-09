@@ -21,7 +21,7 @@ const Game = () => {
   const startGame = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://127.0.0.1:5000/video_feed', {
+      const response = await axios.get('http://127.0.0.1:5001/video_feed', {
         responseType: 'blob'
       });
       setMessage('Game started');
@@ -39,7 +39,7 @@ const Game = () => {
     if (webcamRef.current) {
       const imageSrc = webcamRef.current.getScreenshot();
       try {
-        const response = await axios.post('http://127.0.0.1:5000/check_gesture', { gesture: imageSrc }, {
+        const response = await axios.post('http://127.0.0.1:5001/check_gesture', { gesture: imageSrc }, {
           headers: {
             'Content-Type': 'application/json'
           }
