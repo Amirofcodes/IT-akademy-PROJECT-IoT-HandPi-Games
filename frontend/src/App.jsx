@@ -4,6 +4,7 @@ import Header from './components/header/Header';
 import Home from './pages/Home';
 import './App.css';
 import GamePage from './pages/Game';
+import Footer from './components/footer/Footer';
 
 function App() {
   return (
@@ -15,7 +16,10 @@ function App() {
             <Route path="/game" element={<GamePage />} />
           </Routes>
         </main>
+        <Footer/>
     </Router>
+    
+  
   );
 }
 
