@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import axios from "axios";
+
 import { motion } from "framer-motion";
 
 const ALPHABET = ['A', 'B', 'C', 'D']; // Только 4 буквы
 
 const Game = () => {
-  const [message, setMessage] = useState('');
+  const [message] = useState('');
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [gameStarted, setGameStarted] = useState(false);
@@ -100,3 +100,5 @@ const Game = () => {
     </div>
   );
 };
+
+export default Game
