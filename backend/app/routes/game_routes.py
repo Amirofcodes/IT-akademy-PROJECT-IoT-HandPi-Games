@@ -18,6 +18,6 @@ def check_gesture():
     gesture = request.json.get('gesture')
     if gesture is None:
         return jsonify({'message': 'No gesture provided'}), 400
+
     result = game_service.check_gesture(gesture)
     return jsonify(result)
-

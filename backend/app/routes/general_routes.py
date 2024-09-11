@@ -8,6 +8,7 @@ bp = Blueprint('general', __name__)
 
 @bp.route('/video_feed', methods=['GET'])
 def video_feed():
+    # Get the frames from the camera feed and send them as a streaming response
     return Response(get_reconnaissance_gestes().gen_frames(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
@@ -23,3 +24,4 @@ def check_gesture():
 @bp.route('/', methods=['GET'])
 def home():
     return jsonify({'message': 'Welcome to HandPi Games API'})
+
