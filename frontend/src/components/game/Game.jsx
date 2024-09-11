@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 
-const ALPHABET = ['A', 'B', 'C', 'D']; // Только 4 буквы
+const ALPHABET = ['A', 'B', 'C', 'D']; // Only letters A, B, C, D for this mini-game
 
 const Game = () => {
   const [message, setMessage] = useState('');
@@ -13,7 +13,7 @@ const Game = () => {
 
   useEffect(() => {
     if (gameStarted && !gameCompleted) {
-      const interval = setInterval(checkGesture, 1000); // Проверять жест каждую секунду
+      const interval = setInterval(checkGesture, 1000); // Check gesture every second
       return () => clearInterval(interval);
     }
   }, [gameStarted, gameCompleted]);
@@ -27,12 +27,14 @@ const Game = () => {
 
   const checkGesture = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:5001/check_gesture', {}, {
+      const response = await axios.post('http://127.0.0.1:5001/api/game/check', {
+        gesture: ALPHABET[currentLetterIndex]
+      }, {
         headers: { 'Content-Type': 'application/json' }
       });
       console.log('Response from server:', response.data);
       setMessage(response.data.message || 'Geste vérifié');
-      if (response.data.predicted_character === ALPHABET[currentLetterIndex]) {
+      if (response.data.message === 'Correct!') {
         setScore(prevScore => prevScore + 1);
         if (currentLetterIndex === ALPHABET.length - 1) {
           setGameCompleted(true);
@@ -60,11 +62,11 @@ const Game = () => {
       ) : (
         <div className="flex flex-col items-center">
           <img 
-            ref={imgRef}
-            src="http://127.0.0.1:5001/video_feed"
-            className="mb-4 rounded-lg"
-            alt="Video feed"
-          />
+    ref={imgRef}
+    src="http://127.0.0.1:5001/video_feed"  // Corrected URL
+    className="mb-4 rounded-lg"
+    alt="Video feed"
+/>
           <p className="text-xl mb-2">{message}</p>
           <p className="text-2xl mb-2">Montrez la lettre: {ALPHABET[currentLetterIndex]}</p>
           <p className="text-xl mb-4">Score: {score} / {ALPHABET.length}</p>
