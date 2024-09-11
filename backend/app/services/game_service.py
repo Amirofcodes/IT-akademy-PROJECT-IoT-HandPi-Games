@@ -7,7 +7,7 @@ class GameService:
             self.current_game = {
                 'score': 0,
                 'current_letter_index': 0,
-                'letters': ['A', 'B', 'C', 'D']  # Only letters A, B, C, D for this mini-game
+                'letters': ['A', 'B', 'C', 'D']
             }
             return {
                 'message': 'Game started',
@@ -49,3 +49,4 @@ class GameService:
             return {'message': 'Incorrect, try again'}
 
 game_service = GameService()
+

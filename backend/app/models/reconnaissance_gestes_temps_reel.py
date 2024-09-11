@@ -8,35 +8,48 @@ warnings.filterwarnings("ignore", category=UserWarning, module="google.protobuf.
 
 class ReconnaissanceGestesTempsReel:
     def __init__(self, chemin_modele: str, labels_dict: dict):
-        # Load the model and set up mediapipe for hand tracking
         self.charger_modele(chemin_modele)
         self.labels_dict = labels_dict
         self.configurer_mediapipe()
 
     def charger_modele(self, chemin_modele: str):
-        # Load the gesture recognition model from the specified file
         with open(chemin_modele, 'rb') as f:
             model_dict = pickle.load(f)
         self.model = model_dict['model']
 
     def configurer_mediapipe(self):
-        # Set up mediapipe for hand landmarks detection
         self.mp_hands = mp.solutions.hands
         self.mp_drawing = mp.solutions.drawing_utils
         self.mp_drawing_styles = mp.solutions.drawing_styles
         self.hands = self.mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
 
+    def get_latest_frame(self):
+        cap = cv2.VideoCapture(0)
+        if not cap.isOpened():
+            print("Error: Could not open camera.")
+            return None
+        
+        try:
+            ret, frame = cap.read()
+            if not ret:
+                print("Error: Could not read frame.")
+                return None
+            return frame
+        except Exception as e:
+            print(f"Error capturing frame: {str(e)}")
+            return None
+        finally:
+            cap.release()
+
     def traiter_frame(self, frame):
-        # Process each frame for gesture recognition
         data_aux = []
         x_ = []
         y_ = []
 
         if frame is None:
             print("Frame is None")
-            return None
+            return {'predicted_character': 'Unknown'}
 
-        # Flip the frame horizontally for a selfie-view display
         frame = cv2.flip(frame, 1)
         H, W, _ = frame.shape
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -44,7 +57,6 @@ class ReconnaissanceGestesTempsReel:
         results = self.hands.process(frame_rgb)
         if results.multi_hand_landmarks:
             for hand_landmarks in results.multi_hand_landmarks:
-                # Draw the landmarks on the frame
                 self.mp_drawing.draw_landmarks(
                     frame,
                     hand_landmarks,
@@ -53,45 +65,38 @@ class ReconnaissanceGestesTempsReel:
                     self.mp_drawing_styles.get_default_hand_connections_style()
                 )
 
-                # Extract the x and y coordinates of each landmark
                 for i in range(len(hand_landmarks.landmark)):
                     x = hand_landmarks.landmark[i].x
                     y = hand_landmarks.landmark[i].y
                     x_.append(x)
                     y_.append(y)
 
-                # Normalize the landmarks' coordinates
                 for i in range(0, 21):
                     data_aux.append(x_[i] - min(x_))
                     data_aux.append(y_[i] - min(y_))
 
-            # Predict the gesture if the data is sufficient
-            if len(data_aux) == 42:
-                prediction = self.model.predict([np.asarray(data_aux)])
-                predicted_character = self.labels_dict.get(str(prediction[0]), 'Inconnu')
+        predicted_character = 'Unknown'
+        if len(data_aux) == 42:
+            prediction = self.model.predict([np.asarray(data_aux)])
+            predicted_character = self.labels_dict.get(str(prediction[0]), 'Unknown')
 
-                # Draw a rectangle around the detected hand
-                x1, y1 = int(min(x_) * W) - 10, int(min(y_) * H) - 10
-                x2, y2 = int(max(x_) * W) - 10, int(max(y_) * H) - 10
-                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
-                cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
-            else:
-                print(f"Nombre de caractéristiques inattendu : {len(data_aux)}")
+            x1, y1 = int(min(x_) * W) - 10, int(min(y_) * H) - 10
+            x2, y2 = int(max(x_) * W) - 10, int(max(y_) * H) - 10
+            cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
+            cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
 
-        return frame
+        return {'predicted_character': predicted_character, 'frame': frame}
 
     def gen_frames(self):
-        # Start generating frames from the camera for video streaming
         print("Début de gen_frames")
-        cap = cv2.VideoCapture(0)  # Use the default camera
+        cap = cv2.VideoCapture(0)
 
-        print(f"Caméra ouverte: {cap.isOpened()}")  # Log whether the camera opened successfully
+        print(f"Caméra ouverte: {cap.isOpened()}")
 
         if not cap.isOpened():
             print("Erreur: Impossible d'ouvrir la caméra")
             return
 
-        # Set camera properties explicitly for MJPG format
         cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
@@ -104,14 +109,12 @@ class ReconnaissanceGestesTempsReel:
                 break
             else:
                 print("Frame lue avec succès")
-                # Process the frame for gesture recognition
-                frame = self.traiter_frame(frame)
-                ret, buffer = cv2.imencode('.jpg', frame)  # Encode frame as JPEG
+                result = self.traiter_frame(frame)
+                frame = result['frame']
+                ret, buffer = cv2.imencode('.jpg', frame)
                 frame = buffer.tobytes()
 
-                # Stream the frame to the client
                 yield (b'--frame\r\n'
                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
         
-        # Release the camera after use
         cap.release()

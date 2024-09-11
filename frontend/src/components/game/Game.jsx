@@ -1,60 +1,67 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 
-const ALPHABET = ['A', 'B', 'C', 'D'];  // Our target letters for the mini-game
+const ALPHABET = ['A', 'B', 'C', 'D'];
 
 const Game = () => {
   const [message, setMessage] = useState('No game in progress');
-  const [currentLetterIndex, setCurrentLetterIndex] = useState(0);  // Track the current letter
-  const [score, setScore] = useState(0);  // Track the score
-  const [gameStarted, setGameStarted] = useState(false);  // Track if the game is started
-  const [gameCompleted, setGameCompleted] = useState(false);  // Track if the game is completed
+  const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
+  const [score, setScore] = useState(0);
+  const [gameStarted, setGameStarted] = useState(false);
+  const [gameCompleted, setGameCompleted] = useState(false);
+  const [videoError, setVideoError] = useState(false);
   const imgRef = useRef(null);
 
   useEffect(() => {
     if (gameStarted && !gameCompleted) {
-      const interval = setInterval(checkGesture, 1000);  // Check gesture every second
+      const interval = setInterval(checkGesture, 1000);
       return () => clearInterval(interval);
     }
   }, [gameStarted, gameCompleted, currentLetterIndex]);
 
-  // Function to start the game
-  const startGame = () => {
-    setGameStarted(true);
-    setCurrentLetterIndex(0);  // Reset to the first letter (A)
-    setScore(0);  // Reset the score
-    setGameCompleted(false);  // Game isn't completed
-    setMessage("Game started! Show the letter: A");  // Prompt the user
+  const startGame = async () => {
+    try {
+      const response = await axios.post('http://127.0.0.1:5001/api/game/start');
+      setGameStarted(true);
+      setCurrentLetterIndex(0);
+      setScore(0);
+      setGameCompleted(false);
+      setMessage(`Game started! Show the letter: ${response.data.current_letter}`);
+      setVideoError(false);
+    } catch (error) {
+      console.error('Error starting game:', error);
+      setMessage('Error starting game');
+    }
   };
 
-  // Function to check the current gesture with the expected one
   const checkGesture = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:5001/api/game/check', {
-        gesture: ALPHABET[currentLetterIndex]  // Send the expected letter (A, B, C, or D)
-      }, {
-        headers: { 'Content-Type': 'application/json' }
-      });
+      const response = await axios.get('http://127.0.0.1:5001/api/game/check');
+      const { message, new_letter, score, predicted_gesture } = response.data;
 
-      const { message, new_letter, score } = response.data;
+      setMessage(`Gesture detected: ${predicted_gesture}`);
 
-      // If the gesture is correct, proceed to the next letter or complete the game
       if (message === 'Correct!') {
         setScore(score);
         if (currentLetterIndex === ALPHABET.length - 1) {
           setGameCompleted(true);
-          setMessage("Félicitations ! Vous avez terminé le jeu !");
+          setMessage("Congratulations! You've completed the game!");
         } else {
           setCurrentLetterIndex(currentLetterIndex + 1);
-          setMessage(`Show the letter: ${ALPHABET[currentLetterIndex + 1]}`);
+          setMessage(`Show the letter: ${new_letter}`);
         }
       } else {
         setMessage('Incorrect, try again!');
       }
     } catch (error) {
       console.error('Error checking gesture:', error);
-      setMessage('Erreur lors de la vérification du geste');
+      setMessage('Error checking gesture');
     }
+  };
+
+  const handleVideoError = () => {
+    setVideoError(true);
+    setMessage('Error loading video feed. Please check your camera and refresh the page.');
   };
 
   return (
@@ -67,18 +74,25 @@ const Game = () => {
           onClick={startGame}
           className="bg-button-gradient hover:bg-green-700 text-black font-bold py-3 px-20 rounded-full"
         >
-          {gameCompleted ? "Rejouer" : "Démarrer le jeu"}
+          {gameCompleted ? "Replay" : "Start Game"}
         </button>
       ) : (
         <div className="flex flex-col items-center">
-          <img 
-            ref={imgRef}
-            src="http://127.0.0.1:5001/video_feed"  // Ensure video feed from the backend
-            className="mb-4 rounded-lg"
-            alt="Video feed"
-          />
+          {!videoError ? (
+            <img 
+              ref={imgRef}
+              src="http://127.0.0.1:5001/video_feed"
+              className="mb-4 rounded-lg"
+              alt="Video feed"
+              onError={handleVideoError}
+            />
+          ) : (
+            <div className="mb-4 p-4 bg-red-500 text-white rounded-lg">
+              Video feed unavailable. Please check your camera and refresh the page.
+            </div>
+          )}
           <p className="text-xl mb-2">{message}</p>
-          <p className="text-2xl mb-2">Montrez la lettre: {ALPHABET[currentLetterIndex]}</p>
+          <p className="text-2xl mb-2">Show the letter: {ALPHABET[currentLetterIndex]}</p>
           <p className="text-xl mb-4">Score: {score} / {ALPHABET.length}</p>
           <div className="flex space-x-2 mb-4">
             {ALPHABET.map((letter, index) => (
