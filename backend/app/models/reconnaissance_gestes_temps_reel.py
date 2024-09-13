@@ -3,6 +3,7 @@ import pickle
 import cv2
 import mediapipe as mp
 import numpy as np
+import os
 
 warnings.filterwarnings("ignore", category=UserWarning, module="google.protobuf.symbol_database")
 
@@ -60,11 +61,22 @@ class ReconnaissanceGestesTempsReel:
                     prediction = self.model.predict([np.asarray(data_aux)])
                     predicted_character = self.labels_dict.get(str(prediction[0]), 'Inconnu')
 
+                    # Unifier les gestes retournés et non retournés
+                    if predicted_character in ['A', 'A-2']:
+                        predicted_character = 'A'
+                    elif predicted_character in ['B', 'B-2']:
+                        predicted_character = 'B'
+                    elif predicted_character in ['C', 'C-2']:
+                        predicted_character = 'C'
+                    elif predicted_character in ['D', 'D-2']:
+                        predicted_character = 'D'
+
                     x1, y1 = int(min(x_) * W) - 10, int(min(y_) * H) - 10
                     x2, y2 = int(max(x_) * W) - 10, int(max(y_) * H) - 10
 
                     cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
-                    cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
+                    cv2.putText(frame, predicted_character, (x1, y1 - 10),
+                                cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
                 else:
                     print(f"Nombre de caractéristiques inattendu : {len(data_aux)}")
 
@@ -83,4 +95,3 @@ class ReconnaissanceGestesTempsReel:
                 yield (b'--frame\r\n'
                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
         cap.release()
-
