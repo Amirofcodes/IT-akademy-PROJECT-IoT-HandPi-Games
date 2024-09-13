@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import Game from '../components/Game';
 
 const GamesScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>Games Screen</Text>
+      <Game />
     </View>
   );
 };
@@ -14,6 +15,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#111827', 
   },
 });
 

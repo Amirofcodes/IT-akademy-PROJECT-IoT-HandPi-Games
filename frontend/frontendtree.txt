@@ -1,0 +1,50 @@
+
+├── README.md
+├── dist
+│   ├── assets
+│   │   ├── index-DWguJnR7.js
+│   │   └── index-DXb_2bhR.css
+│   ├── img
+│   │   ├── footer-logo.png
+│   │   ├── footer-logo.png:Zone.Identifier
+│   │   ├── header-logo.png
+│   │   └── header-logo.png:Zone.Identifier
+│   └── index.html
+├── frontendtree.txt
+├── index.html
+├── public
+│   └── img
+│       ├── footer-logo.png
+│       └── header-logo.png
+├── src
+│   ├── App.css
+│   ├── App.jsx
+│   ├── assets
+│   │   └── react.svg
+│   ├── components
+│   │   ├── aboutSection
+│   │   │   └── AboutSection.jsx
+│   │   ├── featureSection
+│   │   │   ├── FeatureCard.jsx
+│   │   │   └── FeatureSection.jsx
+│   │   ├── footer
+│   │   │   └── Footer.jsx
+│   │   ├── game
+│   │   │   └── Game.jsx
+│   │   ├── header
+│   │   │   └── Header.jsx
+│   │   ├── hero
+│   │   │   ├── HeroSection.jsx
+│   │   │   └── Slider.jsx
+│   │   ├── introductionSection
+│   │   │   ├── Introduction.jsx
+│   │   │   └── IntroductionSection.jsx
+│   │   └── processSection
+│   │       └── ProcessSection.jsx
+│   ├── index.css
+│   ├── main.jsx
+│   └── pages
+│       ├── Game.jsx
+│       └── Home.jsx
+├── tailwind.config.js
+└── vite.config.js

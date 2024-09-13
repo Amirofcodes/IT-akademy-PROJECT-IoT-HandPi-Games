@@ -1,74 +1,113 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import Slider from '../components/Slider';
 import GameCard from '../components/GameCard';
 
-const slides = [
-  { title: "Apprenez la langue des signes", description: "De manière interactive et amusante" },
-  { title: "Progressez à votre rythme", description: "Des exercices adaptés à tous les niveaux" },
-  { title: "Jouez et apprenez", description: "Développez vos compétences tout en vous amusant" }
+const sliderImages = [
+  require('../../assets/slider-1.png'),
+  require('../../assets/slider-2.png'),
 ];
 
-const games = [
-  { title: "Alphabet", description: "Apprenez les signes de l'alphabet" },
-  { title: "Mots", description: "Élargissez votre vocabulaire" },
-  { title: "Phrases", description: "Construisez des phrases complètes" },
-  { title: "Quiz", description: "Testez vos connaissances" }
+const gamesData = [
+  {
+    image: require('../../assets/alphabet.png'),
+    title: "ALPHABET",
+    description: "Pratiquez les gestes de l'alphabet avec notre jeu. La caméra reconnaît vos gestes et fournit un retour instantané pour améliorer vos compétences.",
+    buttonText: "ESSAYEZ"
+  },
+  {
+    image: require('../../assets/pierre-papier-ciseaux.png'),
+    title: "PIERRE, PAPIER, CISEAUX",
+    description: "Un classique avec une touche moderne ! Utilisez des gestes de la main pour jouer à Pierre, papier, ciseaux.",
+    buttonText: "ESSAYEZ"
+  },
+  {
+    image: require('../../assets/pendu.png'),
+    title: "PENDU",
+    description: "Devinez les lettres et sauvez le personnage dans notre jeu Pendu avec reconnaissance des gestes.",
+    buttonText: "ESSAYEZ"
+  },
+  {
+    image: require('../../assets/jeu-de-cartes.png'),
+    title: "JEU DE CARTES",
+    description: "Jouez aux cartes en utilisant des gestes de la main. Notre jeu reconnaît vos mouvements.",
+    buttonText: "ESSAYEZ"
+  }
 ];
 
-const HomeScreen = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-
+const HomeScreen = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
-      <Slider 
-        slides={slides} 
-        currentSlide={currentSlide} 
-        setCurrentSlide={setCurrentSlide} 
-      />
-      <TouchableOpacity style={styles.startButton}>
-        <Text style={styles.startButtonText}>Commencer</Text>
+      <View style={styles.sliderContainer}>
+        <Slider images={sliderImages} />
+      </View>
+      <TouchableOpacity 
+        onPress={() => navigation.navigate('Jeux')} // Изменено на 'Jeux'
+        style={styles.buttonContainer}
+      >
+        <LinearGradient
+          colors={['#70DD4A', '#43B226']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={styles.startButton}
+        >
+          <Text style={styles.startButtonText}>Commencer</Text>
+        </LinearGradient>
       </TouchableOpacity>
       <Text style={styles.sectionTitle}>Nos jeux</Text>
       <View style={styles.gamesGrid}>
-        {games.map((game, index) => (
+        {gamesData.map((game, index) => (
           <View key={index} style={styles.gameCardWrapper}>
-            <GameCard title={game.title} description={game.description} />
+            <GameCard
+              image={game.image}
+              title={game.title}
+              description={game.description}
+              buttonText={game.buttonText}
+              onPress={() => navigation.navigate('Jeux')} // Изменено на 'Jeux'
+            />
           </View>
         ))}
       </View>
     </ScrollView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#111827',
-    padding: 16,
   },
-  startButton: {
-    backgroundColor: '#10B981',
-    borderRadius: 8,
-    padding: 12,
+  sliderContainer: {
     alignItems: 'center',
+    marginVertical: 20,
+  },
+  buttonContainer: {
+    marginHorizontal: 16,
     marginBottom: 24,
   },
+  startButton: {
+    borderRadius: 25,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+  },
   startButtonText: {
-    color: 'white',
+    color: 'black',
     fontSize: 16,
     fontWeight: 'bold',
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
     marginBottom: 16,
+    paddingHorizontal: 16,
   },
   gamesGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+    paddingHorizontal: 16,
   },
   gameCardWrapper: {
     width: '48%',

@@ -27,10 +27,11 @@ class ReconnaissanceGestesTempsReel:
         data_aux = []
         x_ = []
         y_ = []
+        predicted_character = 'Unknown'
 
         if frame is None:
             print("Frame is None")
-            return None
+            return {'predicted_character': predicted_character, 'frame': None}
 
         frame = cv2.flip(frame, 1)
         H, W, _ = frame.shape
@@ -58,49 +59,40 @@ class ReconnaissanceGestesTempsReel:
 
             if len(data_aux) == 42:
                 prediction = self.model.predict([np.asarray(data_aux)])
-                predicted_character = self.labels_dict.get(str(prediction[0]), 'Inconnu')
+                predicted_character = self.labels_dict.get(str(prediction[0]), 'Unknown')
+
+                # Unifier les gestes retournés et non retournés
+                if predicted_character in ['A', 'A-2']:
+                    predicted_character = 'A'
+                elif predicted_character in ['B', 'B-2']:
+                    predicted_character = 'B'
+                elif predicted_character in ['C', 'C-2']:
+                    predicted_character = 'C'
+                elif predicted_character in ['D', 'D-2']:
+                    predicted_character = 'D'
 
                 x1, y1 = int(min(x_) * W) - 10, int(min(y_) * H) - 10
                 x2, y2 = int(max(x_) * W) - 10, int(max(y_) * H) - 10
-
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
-                cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
+                cv2.putText(frame, predicted_character, (x1, y1 - 10),
+                            cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
             else:
                 print(f"Nombre de caractéristiques inattendu : {len(data_aux)}")
 
-        return frame
+        return {'predicted_character': predicted_character, 'frame': frame}
 
     def gen_frames(self):
-        print("Début de gen_frames")
-        # Option 1: Utiliser le périphérique par défaut
         cap = cv2.VideoCapture(0)
-        # Option 2: Spécifier explicitement le périphérique
-        # cap = cv2.VideoCapture('/dev/video0')
-        # Option 3: Utiliser GStreamer backend
-        # cap = cv2.VideoCapture(0, cv2.CAP_GSTREAMER)
-        
-        print(f"Caméra ouverte: {cap.isOpened()}")
-        
-        if not cap.isOpened():
-            print("Erreur: Impossible d'ouvrir la caméra")
-            return
-
-        # Définir explicitement le format
-        cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-
         while True:
-            print("Tentative de lecture d'une frame")
             success, frame = cap.read()
             if not success:
-                print("Échec de la lecture de la frame")
                 break
             else:
-                print("Frame lue avec succès")
-                frame = self.traiter_frame(frame)
+                result = self.traiter_frame(frame)
+                frame = result['frame']
                 ret, buffer = cv2.imencode('.jpg', frame)
                 frame = buffer.tobytes()
                 yield (b'--frame\r\n'
                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
         cap.release()
+        
