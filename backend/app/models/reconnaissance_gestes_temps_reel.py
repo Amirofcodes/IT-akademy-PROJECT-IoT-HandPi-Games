@@ -4,6 +4,7 @@ import cv2
 import mediapipe as mp
 import numpy as np
 
+
 warnings.filterwarnings("ignore", category=UserWarning, module="google.protobuf.symbol_database")
 
 class ReconnaissanceGestesTempsReel:
@@ -23,24 +24,6 @@ class ReconnaissanceGestesTempsReel:
         self.mp_drawing_styles = mp.solutions.drawing_styles
         self.hands = self.mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
 
-    def get_latest_frame(self):
-        cap = cv2.VideoCapture(0)
-        if not cap.isOpened():
-            print("Error: Could not open camera.")
-            return None
-        
-        try:
-            ret, frame = cap.read()
-            if not ret:
-                print("Error: Could not read frame.")
-                return None
-            return frame
-        except Exception as e:
-            print(f"Error capturing frame: {str(e)}")
-            return None
-        finally:
-            cap.release()
-
     def traiter_frame(self, frame):
         data_aux = []
         x_ = []
@@ -48,7 +31,7 @@ class ReconnaissanceGestesTempsReel:
 
         if frame is None:
             print("Frame is None")
-            return {'predicted_character': 'Unknown'}
+            return None
 
         frame = cv2.flip(frame, 1)
         H, W, _ = frame.shape
@@ -62,8 +45,7 @@ class ReconnaissanceGestesTempsReel:
                     hand_landmarks,
                     self.mp_hands.HAND_CONNECTIONS,
                     self.mp_drawing_styles.get_default_hand_landmarks_style(),
-                    self.mp_drawing_styles.get_default_hand_connections_style()
-                )
+                    self.mp_drawing_styles.get_default_hand_connections_style())
 
                 for i in range(len(hand_landmarks.landmark)):
                     x = hand_landmarks.landmark[i].x
@@ -75,46 +57,41 @@ class ReconnaissanceGestesTempsReel:
                     data_aux.append(x_[i] - min(x_))
                     data_aux.append(y_[i] - min(y_))
 
-        predicted_character = 'Unknown'
-        if len(data_aux) == 42:
-            prediction = self.model.predict([np.asarray(data_aux)])
-            predicted_character = self.labels_dict.get(str(prediction[0]), 'Unknown')
+                if len(data_aux) == 42:
+                    prediction = self.model.predict([np.asarray(data_aux)])
+                    predicted_character = self.labels_dict.get(str(prediction[0]), 'Inconnu')
 
-            x1, y1 = int(min(x_) * W) - 10, int(min(y_) * H) - 10
-            x2, y2 = int(max(x_) * W) - 10, int(max(y_) * H) - 10
-            cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
-            cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
+                    # Unifier les gestes retournés et non retournés
+                    if predicted_character in ['A', 'A-2']:
+                        predicted_character = 'A'
+                    elif predicted_character in ['B', 'B-2']:
+                        predicted_character = 'B'
+                    elif predicted_character in ['C', 'C-2']:
+                        predicted_character = 'C'
+                    elif predicted_character in ['D', 'D-2']:
+                        predicted_character = 'D'
 
-        return {'predicted_character': predicted_character, 'frame': frame}
+                    x1, y1 = int(min(x_) * W) - 10, int(min(y_) * H) - 10
+                    x2, y2 = int(max(x_) * W) - 10, int(max(y_) * H) - 10
+
+                    cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
+                    cv2.putText(frame, predicted_character, (x1, y1 - 10),
+                                cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
+                else:
+                    print(f"Nombre de caractéristiques inattendu : {len(data_aux)}")
+
+        return frame
 
     def gen_frames(self):
-        print("Début de gen_frames")
         cap = cv2.VideoCapture(0)
-
-        print(f"Caméra ouverte: {cap.isOpened()}")
-
-        if not cap.isOpened():
-            print("Erreur: Impossible d'ouvrir la caméra")
-            return
-
-        cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-
         while True:
-            print("Tentative de lecture d'une frame")
             success, frame = cap.read()
             if not success:
-                print("Échec de la lecture de la frame")
                 break
             else:
-                print("Frame lue avec succès")
-                result = self.traiter_frame(frame)
-                frame = result['frame']
+                frame = self.traiter_frame(frame)
                 ret, buffer = cv2.imencode('.jpg', frame)
                 frame = buffer.tobytes()
-
                 yield (b'--frame\r\n'
                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-        
         cap.release()
