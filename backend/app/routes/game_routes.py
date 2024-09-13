@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from app.services.game_service import game_service
 from app.models.user import get_reconnaissance_gestes
 import numpy as np
+import cv2
 
 bp = Blueprint('game', __name__, url_prefix='/api/game')
 
@@ -18,14 +19,18 @@ def end_game():
 @bp.route('/check', methods=['GET'])
 def check_gesture():
     reconnaissance_gestes = get_reconnaissance_gestes()
-    frame = reconnaissance_gestes.get_latest_frame()
-    if frame is None:
+    
+    # Instead of get_latest_frame, we'll capture a frame directly
+    cap = cv2.VideoCapture(0)
+    ret, frame = cap.read()
+    cap.release()
+    
+    if not ret or frame is None:
         print("Error: No frame available")
         return jsonify({'message': 'No frame available'}), 400
-
+    
     try:
         result = reconnaissance_gestes.traiter_frame(frame)
-        
         if isinstance(result, dict):
             predicted_gesture = result.get('predicted_character', 'Unknown')
         else:
@@ -37,3 +42,4 @@ def check_gesture():
     except Exception as e:
         print(f"Error processing frame: {str(e)}")
         return jsonify({'message': 'Error processing frame'}), 500
+    

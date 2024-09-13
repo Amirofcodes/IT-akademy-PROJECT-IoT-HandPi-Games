@@ -10,6 +10,7 @@ const Game = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [gameCompleted, setGameCompleted] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const [detectedGesture, setDetectedGesture] = useState('');
   const imgRef = useRef(null);
 
   useEffect(() => {
@@ -30,16 +31,16 @@ const Game = () => {
       setVideoError(false);
     } catch (error) {
       console.error('Error starting game:', error);
-      setMessage('Error starting game');
+      setMessage('Error starting game. Please try again.');
     }
   };
 
   const checkGesture = async () => {
     try {
       const response = await axios.get('http://127.0.0.1:5001/api/game/check');
-      const { message, new_letter, score, predicted_gesture } = response.data;
+      const { message, new_letter, score, predicted_gesture, expected_letter } = response.data;
 
-      setMessage(`Gesture detected: ${predicted_gesture}`);
+      setDetectedGesture(predicted_gesture);
 
       if (message === 'Correct!') {
         setScore(score);
@@ -47,15 +48,18 @@ const Game = () => {
           setGameCompleted(true);
           setMessage("Congratulations! You've completed the game!");
         } else {
-          setCurrentLetterIndex(currentLetterIndex + 1);
-          setMessage(`Show the letter: ${new_letter}`);
+          setCurrentLetterIndex(prev => prev + 1);
+          setMessage(`Correct! Now show the letter: ${new_letter}`);
         }
-      } else {
-        setMessage('Incorrect, try again!');
+      } else if (message === 'Incorrect, try again') {
+        setMessage(`Incorrect. Expected: ${expected_letter}, Detected: ${predicted_gesture}. Try again!`);
+      } else if (message === 'No game in progress') {
+        setGameStarted(false);
+        setMessage('Game session expired. Please start a new game.');
       }
     } catch (error) {
       console.error('Error checking gesture:', error);
-      setMessage('Error checking gesture');
+      setMessage('Error checking gesture. Please ensure your camera is working.');
     }
   };
 
@@ -74,7 +78,7 @@ const Game = () => {
           onClick={startGame}
           className="bg-button-gradient hover:bg-green-700 text-black font-bold py-3 px-20 rounded-full"
         >
-          {gameCompleted ? "Replay" : "Start Game"}
+          {gameCompleted ? "Play Again" : "Start Game"}
         </button>
       ) : (
         <div className="flex flex-col items-center">
@@ -93,6 +97,7 @@ const Game = () => {
           )}
           <p className="text-xl mb-2">{message}</p>
           <p className="text-2xl mb-2">Show the letter: {ALPHABET[currentLetterIndex]}</p>
+          <p className="text-xl mb-2">Detected gesture: {detectedGesture}</p>
           <p className="text-xl mb-4">Score: {score} / {ALPHABET.length}</p>
           <div className="flex space-x-2 mb-4">
             {ALPHABET.map((letter, index) => (
