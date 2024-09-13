@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 
 import { motion } from "framer-motion";
 
-const ALPHABET = ['A', 'B', 'C', 'D']; // Только 4 буквы
+const ALPHABET = ['A', 'B', 'C', 'D']; 
 
 const Game = () => {
   const [message] = useState('');
@@ -14,7 +14,7 @@ const Game = () => {
 
   useEffect(() => {
     if (gameStarted && !gameCompleted) {
-      const interval = setInterval(checkGesture, 1000); // Проверять жест каждую секунду
+      const interval = setInterval(checkGesture, 1000); 
       return () => clearInterval(interval);
     }
   }, [gameStarted, gameCompleted]);

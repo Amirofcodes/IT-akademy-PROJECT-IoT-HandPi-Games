@@ -1,13 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef(null);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        closeMenu();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   return (
     <header className="text-white p-4">
@@ -34,7 +57,7 @@ const Header = () => {
         </div>
       </div>
       {isOpen && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex flex-col items-start p-6 z-50" style={{ width: '80%', maxWidth: '300px' }}>
+        <div ref={menuRef} className="fixed inset-0 bg-gray-800 bg-opacity-75 flex flex-col items-start p-6 z-50" style={{ width: '80%', maxWidth: '300px' }}>
           <XMarkIcon className="h-6 w-6 self-end cursor-pointer" onClick={toggleMenu} />
           <nav className="mt-4 space-y-4">
             <Link to="/" className="block text-white hover:text-green-500" onClick={toggleMenu}>Home</Link>
