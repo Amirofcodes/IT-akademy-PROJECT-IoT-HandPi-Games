@@ -66,7 +66,7 @@ HandPi Games integrates IoT, AI, and interactive learning through a Raspberry Pi
 ### Playing the Test Game
 
 1. Ensure both backend and frontend servers are running.
-2. Open a web browser and go to `http://localhost:3000`.
+2. Open a web browser and go to `http://localhost:5173/`.
 3. Click "Start Game" and follow on-screen instructions to show hand gestures for letters A, B, C, and D.
 4. The game will recognize your gestures and progress through the alphabet.
 
