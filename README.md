@@ -18,7 +18,7 @@ We are excited to announce that we have successfully implemented a testing versi
 
 Check out our video demonstration:
 
-https://github.com/Amirofcodes/IT-akademy-PROJECT-IoT-HandPi-Games/blob/abcd-only/Docs/ABCD-WORKING.m4v
+https://github.com/Amirofcodes/IT-akademy-PROJECT-IoT-HandPi-Games/assets/138374972/3bc904e3-70e6-4180-85f1-fb9a176dd3f4
 
 ## Conformity to Hackathon Objectives
 
