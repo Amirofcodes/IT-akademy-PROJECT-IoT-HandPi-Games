@@ -2,67 +2,95 @@
 
 ## Description
 
-HandPi Games est une collection innovante de jeux utilisant la reconnaissance des gestes de la main par IA, développée spécifiquement pour le hackathon "Open Project IoT". Ce projet répond parfaitement aux critères du hackathon en combinant l'IoT, l'IA et l'apprentissage interactif.
+HandPi Games is an innovative collection of games using AI-powered hand gesture recognition, developed for the "Open Project IoT" hackathon. This project seamlessly integrates IoT, AI, and interactive learning.
 
-## Conformité aux Objectifs du Hackathon
+## Project Status
 
-✅ **Objet Connecté Fonctionnel** : Utilisation du Raspberry Pi 4 avec module caméra.
+We are excited to announce that we have successfully implemented a testing version of our first game: the ABCD Game!
 
-✅ **Application Web de Contrôle** : Interface utilisateur web pour interagir avec le jeu.
+### ABCD Game (Testing Version)
 
-✅ **Développement Full-Stack** : Intégration de front-end et back-end.
+- **Functionality**: The game connects the frontend to the backend using our API.
+- **Gameplay**: Players are prompted to show hand gestures representing letters A, B, C, and D.
+- **Recognition**: Our AI model recognizes the gestures in real-time.
+- **Scoring**: Players progress through the alphabet, with the game ending upon successful completion.
+- **Replay**: After completion, players can start a new game.
 
-✅ **Architecture Asynchrone** : Système permettant un pilotage flexible de l'objet connecté.
+Check out our video demonstration:
 
-✅ **Innovation et Créativité** : Utilisation de l'IA pour la reconnaissance des gestes.
+https://github.com/Amirofcodes/IT-akademy-PROJECT-IoT-HandPi-Games/assets/138374972/3bc904e3-70e6-4180-85f1-fb9a176dd3f4
 
-✅ **Impact Social** : Facilite l'apprentissage de la langue des signes.
+## Conformity to Hackathon Objectives
 
-## Fonctionnalités Principales
+✅ **Functional Connected Object**: Utilizes Raspberry Pi 4 with a camera module.
+✅ **Web Control Application**: Interactive user interface for game interaction.
+✅ **Full-Stack Development**: Integrates frontend and backend components.
+✅ **Asynchronous Architecture**: Enables flexible control of the connected object.
+✅ **Innovation and Creativity**: Employs AI for gesture recognition.
+✅ **Social Impact**: Facilitates learning of the alphabet and sign language basics.
 
-### Jeu d'Apprentissage de la Langue des Signes :
-- Affichage de lettres à l'écran.
-- Reconnaissance des signes effectués par le joueur via la caméra.
-- Progression à travers l'alphabet.
+## Main Features
 
-### Mises à Jour Futures :
-- **Stage 2:** Reconnaissance de mots complets en langue des signes.
-- **Pierre-Papier-Ciseaux:** Jeu multijoueur à distance.
+### Alphabet Learning Game:
 
-## Technologies Utilisées
+- Displays letters on screen.
+- Recognizes player's hand gestures via camera.
+- Progresses through the alphabet (currently A to D).
 
-### Matériel:
+### Future Updates:
+
+- **Stage 2:** Recognition of complete words in sign language.
+- **Rock-Paper-Scissors:** Multiplayer game with remote gameplay.
+
+## Technologies Used
+
+### Hardware:
+
 - Raspberry Pi 4
-- Module Caméra
+- Camera Module
 
-### Logiciel:
+### Software:
+
 - Python
 - OpenCV
 - TensorFlow/Keras
 - Flask
 - HTML/CSS/JavaScript
+- React
 
-## Structure du Projet
+## Project Structure
 
-- `backend/`: Code backend et API.
-- `frontend/`: Interface utilisateur web.
-- `model/`: Scripts et modèles de reconnaissance des gestes.
+- `backend/`: Backend code and API.
+- `frontend/`: Web user interface.
+- `model/`: Gesture recognition scripts and models.
 
 ## Architecture
 
-Notre projet utilise une architecture asynchrone conforme aux exigences du hackathon :
-- Client web (Frontend UI)
-- Service API (Backend Flask)
-- Client IoT (Raspberry Pi avec caméra)
+Our project uses an asynchronous architecture as required by the hackathon:
 
-Un système de file d'attente au niveau du service API gère l'absence de connexion temporaire, assurant une robustesse conforme aux attentes du hackathon.
+- Web client (Frontend UI)
+- API Service (Flask Backend)
+- IoT Client (Raspberry Pi with camera)
 
-## Schéma d'Interaction des Composants et Technologies
-<img width="687" alt="Screenshot 2024-07-01 at 11 27 53" src="https://github.com/Amirofcodes/IT-akademy-PROJECT-IoT-HandPi-Games/assets/138374972/0fba9d09-dae9-4f77-8f67-30b72260c096">
+A queue system in the API service manages temporary connection absence, ensuring robustness as per hackathon expectations.
 
+## Component and Technology Interaction Diagram
 
-              
+<img width="687" alt="Component Interaction Diagram" src="https://github.com/Amirofcodes/IT-akademy-PROJECT-IoT-HandPi-Games/assets/138374972/0fba9d09-dae9-4f77-8f67-30b72260c096">
 
+## Getting Started
 
+(Add instructions for setting up and running the project locally)
 
-                                  
+## Contributing
+
+We welcome contributions to the HandPi Games project! Please read our contributing guidelines to get started.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Thanks to the "Open Project IoT" hackathon organizers for the inspiration.
+- Shoutout to all team members and contributors.
