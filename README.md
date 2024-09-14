@@ -1,96 +1,90 @@
 # HandPi Games
 
-## Description
+An innovative AI-powered hand gesture recognition game developed for the "Open Project IoT" hackathon.
 
-HandPi Games is an innovative collection of games using AI-powered hand gesture recognition, developed for the "Open Project IoT" hackathon. This project seamlessly integrates IoT, AI, and interactive learning.
+![ABCD Game Screenshot](Docs/ABCD_GAME_IMG.png)
 
-## Project Status
+## Project Overview
 
-We are excited to announce that we have successfully implemented a testing version of our first game: the ABCD Game!
+HandPi Games integrates IoT, AI, and interactive learning through a Raspberry Pi-based system that recognizes hand gestures to play educational games.
 
-### ABCD Game (Testing Version)
+### Current Status: ABCD Game (Test Version)
 
-- **Functionality**: The game connects the frontend to the backend using our API.
-- **Gameplay**: Players are prompted to show hand gestures representing letters A, B, C, and D.
-- **Recognition**: Our AI model recognizes the gestures in real-time.
-- **Scoring**: Players progress through the alphabet, with the game ending upon successful completion.
-- **Replay**: After completion, players can start a new game.
+- Players show hand gestures for letters A, B, C, and D
+- Real-time AI recognition of gestures
+- Score tracking and game completion logic
 
-Check out our video demonstration:
+## Tech Stack
 
-https://user-images.githubusercontent.com/138374972/257021929-3bc904e3-70e6-4180-85f1-fb9a176dd3f4.mp4
+- **Hardware**: Raspberry Pi 4, Camera Module
+- **Backend**: Python, Flask, OpenCV, TensorFlow/Keras
+- **Frontend**: React, HTML/CSS/JavaScript
 
-## Conformity to Hackathon Objectives
+## Quick Start Guide
 
-✅ **Functional Connected Object**: Utilizes Raspberry Pi 4 with a camera module.
-✅ **Web Control Application**: Interactive user interface for game interaction.
-✅ **Full-Stack Development**: Integrates frontend and backend components.
-✅ **Asynchronous Architecture**: Enables flexible control of the connected object.
-✅ **Innovation and Creativity**: Employs AI for gesture recognition.
-✅ **Social Impact**: Facilitates learning of the alphabet and sign language basics.
+### Prerequisites
 
-## Main Features
+- Python 3.8+
+- Node.js 14+
+- npm 6+
 
-### Alphabet Learning Game:
+### Backend Setup
 
-- Displays letters on screen.
-- Recognizes player's hand gestures via camera.
-- Progresses through the alphabet (currently A to D).
+1. Navigate to the backend directory:
+   ```
+   cd backend
+   ```
+2. Create and activate a virtual environment:
+   ```
+   python -m venv venv
+   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   ```
+3. Install dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+4. Start the Flask server:
+   ```
+   python run.py
+   ```
 
-### Future Updates:
+### Frontend Setup
 
-- **Stage 2:** Recognition of complete words in sign language.
-- **Rock-Paper-Scissors:** Multiplayer game with remote gameplay.
+1. Navigate to the frontend directory:
+   ```
+   cd frontend
+   ```
+2. Install dependencies:
+   ```
+   npm install
+   ```
+3. Start the React development server:
+   ```
+   npm start
+   ```
 
-## Technologies Used
+### Playing the Test Game
 
-### Hardware:
-
-- Raspberry Pi 4
-- Camera Module
-
-### Software:
-
-- Python
-- OpenCV
-- TensorFlow/Keras
-- Flask
-- HTML/CSS/JavaScript
-- React
+1. Ensure both backend and frontend servers are running.
+2. Open a web browser and go to `http://localhost:3000`.
+3. Click "Start Game" and follow on-screen instructions to show hand gestures for letters A, B, C, and D.
+4. The game will recognize your gestures and progress through the alphabet.
 
 ## Project Structure
 
-- `backend/`: Backend code and API.
-- `frontend/`: Web user interface.
-- `model/`: Gesture recognition scripts and models.
+- `backend/`: Flask server, AI model, and game logic
+- `frontend/`: React application and user interface
+- `model/`: Gesture recognition model and training scripts
 
-## Architecture
+## Future Plans
 
-Our project uses an asynchronous architecture as required by the hackathon:
-
-- Web client (Frontend UI)
-- API Service (Flask Backend)
-- IoT Client (Raspberry Pi with camera)
-
-A queue system in the API service manages temporary connection absence, ensuring robustness as per hackathon expectations.
-
-## Component and Technology Interaction Diagram
-
-<img width="687" alt="Component Interaction Diagram" src="https://github.com/Amirofcodes/IT-akademy-PROJECT-IoT-HandPi-Games/assets/138374972/0fba9d09-dae9-4f77-8f67-30b72260c096">
-
-## Getting Started
-
-(Add instructions for setting up and running the project locally)
-
-## Contributing
-
-We welcome contributions to the HandPi Games project! Please read our contributing guidelines to get started.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+- Expand gesture recognition to full alphabet and words
+- Implement multiplayer functionality
+- Enhance UI/UX based on user feedback
 
 ## Acknowledgments
 
-- Thanks to the "Open Project IoT" hackathon organizers for the inspiration.
-- Shoutout to all team members and contributors.
+- "Open Project IoT" hackathon organizers
+- All team members and contributors
+
+For more details, please refer to our [documentation](link-to-your-documentation).
