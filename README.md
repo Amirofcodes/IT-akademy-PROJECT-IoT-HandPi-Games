@@ -20,6 +20,16 @@ HandPi Games integrates IoT, AI, and interactive learning through a Raspberry Pi
 - **Backend**: Python, Flask, OpenCV, TensorFlow/Keras
 - **Frontend**: React, HTML/CSS/JavaScript
 
+## Project Flow
+
+The following sequence diagram illustrates the flow of the ABCD game, from start to finish:
+
+```mermaid
+[Docs/HandPi_Games_ABCD_Sequence_Diagram.mermaid](./Docs/HandPi_Games_ABCD_Sequence_Diagram.mermaid)
+```
+
+This diagram shows the interaction between the player, frontend, backend, and various components during a game session.
+
 ## Quick Start Guide
 
 ### Prerequisites
