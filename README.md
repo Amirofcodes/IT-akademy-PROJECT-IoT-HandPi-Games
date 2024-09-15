@@ -41,6 +41,14 @@ sequenceDiagram
     Backend-->>Frontend: Game started response
     Frontend->>Player: Display "Show letter A"
 
+    Frontend->>Backend: GET /video_feed
+    loop Video Stream
+        Backend->>OpenCV: Capture frame
+        OpenCV-->>Backend: Frame captured
+        Backend-->>Frontend: Stream video frame
+        Frontend->>Player: Display video frame
+    end
+
     loop For each letter (A to D)
         Frontend->>Backend: GET /api/game/check (every 1 second)
         Backend->>OpenCV: Capture frame

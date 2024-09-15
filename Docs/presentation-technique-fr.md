@@ -13,25 +13,38 @@ L'application suit une architecture client-serveur classique :
 - **Matériel** : Raspberry Pi 4 avec module caméra
 
 ### Flux de données
-1. Le frontend capture les gestes via la caméra
-2. Les images sont envoyées au backend
-3. Le backend traite les images et reconnaît les gestes
-4. Le résultat est renvoyé au frontend pour mise à jour de l'interface
+
+1. Le frontend demande une vérification de geste au backend via l'API
+2. Le backend capture une image via la caméra côté serveur
+3. Le backend traite l'image et reconnaît le geste
+4. Le résultat de la reconnaissance est renvoyé au frontend pour mise à jour de l'interface
+5. Le frontend affiche le flux vidéo en continu via une balise `<img>` pointant vers l'endpoint `/video_feed`
+
+Cette approche présente plusieurs avantages :
+
+- Réduction de la charge sur le client (pas de traitement d'image côté frontend)
+- Meilleure sécurité (le modèle de reconnaissance reste côté serveur)
+- Compatibilité accrue (fonctionne sur des clients avec des capacités variées)
+
+Il est important de noter que pour une adaptation mobile future, cette logique pourrait nécessiter des ajustements, notamment pour la capture et l'envoi d'images depuis l'appareil mobile vers le serveur.
 
 ## 3. Composants clés
 
 ### 3.1 Frontend (React)
 
 #### Fichiers principaux :
+
 - `src/App.jsx` : Point d'entrée de l'application
 - `src/components/game/Game.jsx` : Logique principale du jeu
 
 #### Fonctionnalités clés :
+
 - Utilisation de hooks React (`useState`, `useEffect`) pour la gestion d'état
 - Communication avec le backend via Axios
 - Rendu conditionnel basé sur l'état du jeu
 
 #### Exemple de code (Game.jsx) :
+
 ```jsx
 const [gameStarted, setGameStarted] = useState(false);
 const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
@@ -43,22 +56,26 @@ useEffect(() => {
   }
 }, [gameStarted, currentLetterIndex]);
 ```
+
 Ce code utilise `useState` pour gérer l'état du jeu et `useEffect` pour configurer un intervalle qui vérifie les gestes toutes les secondes.
 
 ### 3.2 Backend (Flask)
 
 #### Fichiers principaux :
+
 - `run.py` : Point d'entrée du serveur
 - `app/routes/game_routes.py` : Routes API pour le jeu
 - `app/services/game_service.py` : Logique du jeu
 - `app/models/reconnaissance_gestes_temps_reel.py` : Traitement des gestes
 
 #### Fonctionnalités clés :
+
 - API RESTful avec Flask
 - Traitement d'image avec OpenCV
 - Reconnaissance de gestes avec TensorFlow/Keras
 
 #### Exemple de code (game_routes.py) :
+
 ```python
 @bp.route('/check', methods=['GET'])
 def check_gesture():
@@ -66,29 +83,34 @@ def check_gesture():
     cap = cv2.VideoCapture(0)
     ret, frame = cap.read()
     cap.release()
-    
+
     if not ret or frame is None:
         return jsonify({'message': 'No frame available'}), 400
-    
+
     result = reconnaissance_gestes.traiter_frame(frame)
     predicted_gesture = result.get('predicted_character', 'Unknown')
     game_result = game_service.check_gesture(predicted_gesture)
     return jsonify({**game_result, 'predicted_gesture': predicted_gesture})
 ```
+
 Cette route capture une image, la traite pour reconnaître un geste, puis vérifie si le geste correspond à la lettre attendue.
 
 ## 4. Patterns de conception et principes
 
 ### 4.1 Singleton
+
 Utilisé pour `GameService` et `ReconnaissanceGestesTempsReel` pour garantir une seule instance.
 
 ### 4.2 Factory
+
 La fonction `get_reconnaissance_gestes()` agit comme une factory pour créer l'instance de `ReconnaissanceGestesTempsReel`.
 
 ### 4.3 Dependency Injection
+
 Les services sont injectés dans les routes, permettant une meilleure testabilité et modularité.
 
 ### 4.4 RESTful API
+
 L'API suit les principes REST pour une interface cohérente et scalable.
 
 ## 5. Flux de jeu détaillé
