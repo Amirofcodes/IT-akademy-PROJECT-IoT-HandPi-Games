@@ -95,6 +95,81 @@ def check_gesture():
 
 Cette route capture une image, la traite pour reconnaître un geste, puis vérifie si le geste correspond à la lettre attendue.
 
+## 3.3 Diagramme de Classes
+
+Pour mieux comprendre la structure de notre projet, voici un diagramme de classes représentant les principaux composants et leurs relations :
+
+```mermaid
+classDiagram
+    class App {
+        +render()
+    }
+    class Game {
+        -message: string
+        -currentLetterIndex: int
+        -score: int
+        -gameStarted: boolean
+        -gameCompleted: boolean
+        -videoError: boolean
+        -detectedGesture: string
+        +startGame()
+        +checkGesture()
+        +handleVideoError()
+        +render()
+    }
+    class GameService {
+        -current_game: dict
+        +start_game()
+        +end_game()
+        +check_gesture(gesture: string)
+    }
+    class ReconnaissanceGestesTempsReel {
+        -model: AIModel
+        -labels_dict: dict
+        -mp_hands: MediaPipe.Hands
+        +charger_modele(chemin_modele: string)
+        +configurer_mediapipe()
+        +traiter_frame(frame: Image)
+        +gen_frames()
+    }
+    class GameRoutes {
+        +start_game()
+        +end_game()
+        +check_gesture()
+    }
+
+    App --> Game
+    Game ..> axios : uses
+    GameRoutes ..> GameService : uses
+    GameRoutes ..> ReconnaissanceGestesTempsReel : uses
+    ReconnaissanceGestesTempsReel ..> OpenCV : uses
+    ReconnaissanceGestesTempsReel ..> MediaPipe : uses
+    ReconnaissanceGestesTempsReel ..> TensorFlow : uses
+```
+
+### Explication du Diagramme de Classes
+
+1. **App** : C'est le composant React principal qui sert de point d'entrée à notre application frontend. Il est responsable du rendu global de l'interface utilisateur.
+
+2. **Game** : Cette classe représente le composant React qui gère la logique et l'interface utilisateur du jeu. Elle maintient l'état du jeu (score, lettre actuelle, etc.) et contient des méthodes pour démarrer le jeu, vérifier les gestes et gérer les erreurs vidéo.
+
+3. **GameService** : C'est un service backend qui gère l'état du jeu côté serveur. Il contient des méthodes pour démarrer et terminer une partie, ainsi que pour vérifier si un geste correspond à la lettre attendue.
+
+4. **ReconnaissanceGestesTempsReel** : Cette classe est au cœur de notre système de reconnaissance de gestes. Elle utilise un modèle d'IA (probablement TensorFlow) pour analyser les images et prédire les gestes. Elle s'appuie sur OpenCV pour le traitement d'image et MediaPipe pour la détection des mains.
+
+5. **GameRoutes** : Cette classe représente les routes Flask de notre API backend. Elle fait le lien entre les requêtes HTTP entrantes et les services appropriés (GameService et ReconnaissanceGestesTempsReel).
+
+### Relations entre les Classes
+
+- Le composant **App** contient le composant **Game**.
+- **Game** utilise la bibliothèque axios pour communiquer avec le backend via les routes définies dans **GameRoutes**.
+- **GameRoutes** utilise **GameService** pour gérer la logique du jeu et **ReconnaissanceGestesTempsReel** pour la reconnaissance des gestes.
+- **ReconnaissanceGestesTempsReel** dépend d'OpenCV, MediaPipe et TensorFlow pour ses fonctionnalités.
+
+Ce diagramme de classes nous donne une vue d'ensemble de l'architecture de notre application, montrant comment les différents composants interagissent entre eux. Il met en évidence la séparation claire entre le frontend (React) et le backend (Flask), ainsi que l'utilisation de services spécialisés pour la gestion du jeu et la reconnaissance des gestes.
+
+Cette structure modulaire facilite la maintenance et l'évolution future du projet, permettant par exemple d'ajouter de nouveaux jeux ou d'améliorer l'algorithme de reconnaissance des gestes sans impacter l'ensemble du système.
+
 ## 4. Patterns de conception et principes
 
 ### 4.1 Singleton
