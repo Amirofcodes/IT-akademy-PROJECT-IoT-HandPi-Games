@@ -147,4 +147,4 @@ This diagram shows the interaction between the player, frontend, backend, and va
 - "Open Project IoT" hackathon organizers
 - All team members and contributors
 
-For more details, please refer to our [documentation](link-to-your-documentation).
+For more details, please refer to our [documentation](Docs/presentation-technique-fr.md).
