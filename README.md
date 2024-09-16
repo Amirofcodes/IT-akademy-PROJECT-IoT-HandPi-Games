@@ -1,68 +1,150 @@
 # HandPi Games
 
-## Description
+An innovative AI-powered hand gesture recognition game developed for the "Open Project IoT" hackathon.
 
-HandPi Games est une collection innovante de jeux utilisant la reconnaissance des gestes de la main par IA, développée spécifiquement pour le hackathon "Open Project IoT". Ce projet répond parfaitement aux critères du hackathon en combinant l'IoT, l'IA et l'apprentissage interactif.
+![ABCD Game Screenshot](Docs/ABCD_GAME_IMG.png)
 
-## Conformité aux Objectifs du Hackathon
+## Project Overview
 
-✅ **Objet Connecté Fonctionnel** : Utilisation du Raspberry Pi 4 avec module caméra.
+HandPi Games integrates IoT, AI, and interactive learning through a Raspberry Pi-based system that recognizes hand gestures to play educational games.
 
-✅ **Application Web de Contrôle** : Interface utilisateur web pour interagir avec le jeu.
+### Current Status: ABCD Game (Test Version)
 
-✅ **Développement Full-Stack** : Intégration de front-end et back-end.
+- Players show hand gestures for letters A, B, C, and D
+- Real-time AI recognition of gestures
+- Score tracking and game completion logic
 
-✅ **Architecture Asynchrone** : Système permettant un pilotage flexible de l'objet connecté.
+## Tech Stack
 
-✅ **Innovation et Créativité** : Utilisation de l'IA pour la reconnaissance des gestes.
+- **Hardware**: Raspberry Pi 4, Camera Module
+- **Backend**: Python, Flask, OpenCV, TensorFlow/Keras
+- **Frontend**: React, HTML/CSS/JavaScript
 
-✅ **Impact Social** : Facilite l'apprentissage de la langue des signes.
+## Project Flow
 
-## Fonctionnalités Principales
+The following sequence diagram illustrates the flow of the ABCD game, from start to finish:
 
-### Jeu d'Apprentissage de la Langue des Signes :
-- Affichage de lettres à l'écran.
-- Reconnaissance des signes effectués par le joueur via la caméra.
-- Progression à travers l'alphabet.
+```mermaid
+sequenceDiagram
+    actor Player
+    participant Frontend
+    participant Backend
+    participant GameService
+    participant ReconnaissanceGestes
+    participant OpenCV
+    participant AIModel
 
-### Mises à Jour Futures :
-- **Stage 2:** Reconnaissance de mots complets en langue des signes.
-- **Pierre-Papier-Ciseaux:** Jeu multijoueur à distance.
+    Player->>Frontend: Clicks "Start Game"
+    Frontend->>Backend: POST /api/game/start
+    Backend->>GameService: start_game()
+    GameService-->>Backend: {message: "Game started", current_letter: "A"}
+    Backend-->>Frontend: Game started response
+    Frontend->>Player: Display "Show letter A"
 
-## Technologies Utilisées
+    Frontend->>Backend: GET /video_feed
+    loop Video Stream
+        Backend->>OpenCV: Capture frame
+        OpenCV-->>Backend: Frame captured
+        Backend-->>Frontend: Stream video frame
+        Frontend->>Player: Display video frame
+    end
 
-### Matériel:
-- Raspberry Pi 4
-- Module Caméra
+    loop For each letter (A to D)
+        Frontend->>Backend: GET /api/game/check (every 1 second)
+        Backend->>OpenCV: Capture frame
+        OpenCV-->>Backend: Frame captured
+        Backend->>ReconnaissanceGestes: traiter_frame(frame)
+        ReconnaissanceGestes->>OpenCV: Process frame
+        ReconnaissanceGestes->>AIModel: Predict gesture
+        AIModel-->>ReconnaissanceGestes: Predicted gesture
+        ReconnaissanceGestes-->>Backend: {predicted_character, frame}
+        Backend->>GameService: check_gesture(predicted_gesture)
 
-### Logiciel:
-- Python
-- OpenCV
-- TensorFlow/Keras
-- Flask
-- HTML/CSS/JavaScript
+        alt Correct gesture
+            GameService-->>Backend: {message: "Correct!", new_letter, score}
+            Backend-->>Frontend: Correct gesture response
+            Frontend->>Player: Display "Correct! Show next letter"
+        else Incorrect gesture
+            GameService-->>Backend: {message: "Incorrect, try again"}
+            Backend-->>Frontend: Incorrect gesture response
+            Frontend->>Player: Display "Incorrect, try again"
+        end
+    end
 
-## Structure du Projet
+    Backend->>GameService: check_gesture("D")
+    GameService-->>Backend: {message: "Game ended", final_score}
+    Backend-->>Frontend: Game completed response
+    Frontend->>Player: Display "Congratulations! Game completed"
+    Frontend->>Player: Show "Play Again" button
+```
 
-- `backend/`: Code backend et API.
-- `frontend/`: Interface utilisateur web.
-- `model/`: Scripts et modèles de reconnaissance des gestes.
+This diagram shows the interaction between the player, frontend, backend, and various components during a game session.
 
-## Architecture
+## Quick Start Guide
 
-Notre projet utilise une architecture asynchrone conforme aux exigences du hackathon :
-- Client web (Frontend UI)
-- Service API (Backend Flask)
-- Client IoT (Raspberry Pi avec caméra)
+### Prerequisites
 
-Un système de file d'attente au niveau du service API gère l'absence de connexion temporaire, assurant une robustesse conforme aux attentes du hackathon.
+- Python 3.8+
+- Node.js 14+
+- npm 6+
 
-## Schéma d'Interaction des Composants et Technologies
-<img width="687" alt="Screenshot 2024-07-01 at 11 27 53" src="https://github.com/Amirofcodes/IT-akademy-PROJECT-IoT-HandPi-Games/assets/138374972/0fba9d09-dae9-4f77-8f67-30b72260c096">
+### Backend Setup
 
+1. Navigate to the backend directory:
+   ```
+   cd backend
+   ```
+2. Create and activate a virtual environment:
+   ```
+   python -m venv venv
+   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   ```
+3. Install dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+4. Start the Flask server:
+   ```
+   python run.py
+   ```
 
-              
+### Frontend Setup
 
+1. Navigate to the frontend directory:
+   ```
+   cd frontend
+   ```
+2. Install dependencies:
+   ```
+   npm install
+   ```
+3. Start the React development server:
+   ```
+   npm start
+   ```
 
+### Playing the Test Game
 
-                                  
+1. Ensure both backend and frontend servers are running.
+2. Open a web browser and go to `http://localhost:5173/`.
+3. Click "Start Game" and follow on-screen instructions to show hand gestures for letters A, B, C, and D.
+4. The game will recognize your gestures and progress through the alphabet.
+
+## Project Structure
+
+- `backend/`: Flask server, AI model, and game logic
+- `frontend/`: React application and user interface
+- `model/`: Gesture recognition model and training scripts
+
+## Future Plans
+
+- Expand gesture recognition to full alphabet and words
+- Implement multiplayer functionality
+- Enhance UI/UX based on user feedback
+
+## Acknowledgments
+
+- "Open Project IoT" hackathon organizers
+- All team members and contributors
+
+For more details, please refer to our [documentation](Docs/presentation-technique-fr.md).
