@@ -24,4 +24,3 @@ def check_gesture():
 @bp.route('/', methods=['GET'])
 def home():
     return jsonify({'message': 'Welcome to HandPi Games API'})
-
