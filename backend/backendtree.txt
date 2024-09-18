@@ -1,0 +1,31 @@
+.
+├── __pycache__
+│   ├── config.cpython-311.pyc
+│   └── config.cpython-312.pyc
+├── app
+│   ├── __init__.py
+│   ├── __pycache__
+│   ├── custom_layers.py
+│   ├── models
+│   │   ├── __init__.py
+│   │   ├── data.pickle
+│   │   ├── model.p
+│   │   ├── reconnaissance_gestes_temps_reel.py
+│   │   └── user.py
+│   ├── routes
+│   │   ├── __init__.py
+│   │   ├── game_routes.py
+│   │   ├── general_routes.py
+│   │   └── user_routes.py
+│   ├── services
+│   │   ├── __init__.py
+│   │   ├── game_service.py
+│   │   └── user_service.py
+│   └── utils
+│       ├── __init__.py
+│       └── helpers.py
+├── backendtree.txt
+├── config.py
+├── requirements.txt
+├── run.py
+├── test_opencv.py
